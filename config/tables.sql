@@ -7,6 +7,7 @@ CREATE TABLE
         email VARCHAR(100) NOT NULL UNIQUE,
         profile VARCHAR(100),
         dob DATE,
+        status_active VARCHAR(50),
         user_level VARCHAR(50) DEFAULT 'user',
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
