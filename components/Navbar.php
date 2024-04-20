@@ -25,15 +25,15 @@ $current_page = basename($_SERVER['PHP_SELF']);
 </nav>
 
 <style>
-  /* Additional custom styles */
+  
   .nav-link{
     border-radius: .4rem
   }
   .navbar-nav .nav-item.active .nav-link {
-    background-color: #007bff; /* Blue color */
+    background-color: #007bff;
   }
 
   .navbar-nav .nav-item .nav-link:hover {
-    background-color: #6c757d; /* Dark grey color */
+    background-color: #6c757d;
   }
 </style>

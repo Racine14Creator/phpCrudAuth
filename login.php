@@ -1,3 +1,5 @@
+<?php require_once "./controllers/LoginController.php";?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
