@@ -25,13 +25,13 @@
                     <form action="" method="post" class="needs-validation" novalidate>
                         <div class="form-group">
                           <label for="uname">Username:</label>
-                          <input type="text" class="form-control" id="uname" placeholder="Enter username" name="username" required>
+                          <input type="text" class="form-control" value="<?= $username;?>" id="uname" placeholder="Enter username" name="username" required>
                           <div class="valid-feedback">Valid.</div>
                           <div class="invalid-feedback">Please fill out this field.</div>
                         </div>
                         <div class="form-group">
                           <label for="pwd">Password:</label>
-                          <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="password" required>
+                          <input type="password" class="form-control" id="pwd" value="<?=$password;?>" placeholder="Enter password" name="password" required>
                           <div class="valid-feedback">Valid.</div>
                           <div class="invalid-feedback">Please fill out this field.</div>
                         </div>

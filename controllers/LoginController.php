@@ -11,6 +11,8 @@ if (isset($_SESSION['user_id'])) {
 
 $error = array();
 
+$username = '';
+$password = '';
 
 if(isset($_POST['login'])){
     
@@ -18,26 +20,34 @@ if(isset($_POST['login'])){
     $password = mysqli_real_escape_string($conn, trim(htmlentities(htmlspecialchars($_POST['password']))));
 
     
-    if(empty($username)){array_push($error, "Username is required");}
+    if(empty($username)){array_push($error, "Username or Email is required");}
     if(empty($password)){array_push($error, "The password is required");}
 
     if(count($error) == 0){
 
-        $password = md5($password);
-
-        $query = "SELECT * FROM admin WHERE username = '$username' AND password = '$password'";
+        // Removed password hashing here, as we compare with the hashed password stored in the database
+        $query = "SELECT * FROM users WHERE username = '$username'";
         $result = mysqli_query($conn, $query);
 
-        if(mysqli_num_rows($result)){
-            // To add if the ser connected into the database as is connected
-            $connected = mysqli_query($conn, "UPDATE admin SET `status` = 'Online' WHERE email = ${$email}");
-            if($connected) {
-                $_SESSION['user_id'] = $user_id; // Set the user ID or any relevant data
-                header("Location: index.php");
-                exit();
+        if($result && mysqli_num_rows($result) > 0){
+            $row = mysqli_fetch_assoc($result);
+            $hashed_password = $row['password'];
+            
+            // Verify the password against the hashed password stored in the database
+            if(password_verify($password, $hashed_password)){
+                // Update user status to 'Online'
+                $user_id = $row['user_id'];
+                $connected = mysqli_query($conn, "UPDATE users SET `status_active` = 'Online' WHERE user_id = $user_id");
+                if($connected) {
+                    $_SESSION['user_id'] = $row['user_id']; // Set the user ID or any relevant data
+                    header("Location: index.php");
+                    exit();
+                }
+            }else {
+                array_push($error, "Wrong username/password combination. please try again!!!");
             }
         }else {
-            array_push($error, "Wrong username/password combination. please try again!!!");
+            array_push($error, "User not found. Please check your username/email.");
         }
     }
 }

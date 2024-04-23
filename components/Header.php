@@ -1,14 +1,4 @@
-<?php
-session_start();
 
-// Check if the user is not logged in, redirect to login page
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit();
-}else{
-    header("Location: index.php");
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,5 +15,9 @@ if (!isset($_SESSION['user_id'])) {
 </head>
 <body>
     <div class="container">
-        <?php include("Navbar.php");?>
+        <?php
+            if(isset($_SESSION['user_id'])){
+                include("Navbar.php");
+            }
+        ?>
     </div>

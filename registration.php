@@ -1,3 +1,4 @@
+<?php $error = array();?>
 <?php include ("./components/Header.php")?>
 
     <div class="container mx-auto">

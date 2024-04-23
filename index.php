@@ -1,4 +1,15 @@
-<?php include ("./components/Header.php")?>
+<?php 
+
+include ("./components/Header.php");
+
+// Check if the user is not logged in, redirect to login page
+if (!isset($_SESSION['user_id'])) {
+
+    header("Location: login.php");
+    exit();
+
+}
+?>
 
     <div class="container mx-auto" style="max-width: 1000px; margin: auto;">
         <div class="row">
