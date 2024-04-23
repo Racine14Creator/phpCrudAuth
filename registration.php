@@ -1,14 +1,5 @@
-<?php require_once "./controllers/RegisterController.php";?>
+<?php include ("./components/Header.php")?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRUD App</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-</head>
-<body>
     <div class="container mx-auto">
         <div class="row" style="background: #fff; padding: 20px;">
             <div class="col-md-8 my-5 d-flex flex-column justify-content-center align-items-center">
@@ -19,7 +10,58 @@
             </div>
             <div class="col-md-4 my-5">
                 <div class="card card-body shadow-md">
-                    <? include_once "./components/Error.php";?>
+
+                    <?php 
+                        require_once "./db/connection.php";
+
+                        if (isset($_POST['register'])) {
+                            // Collect form data
+                            $username = mysqli_real_escape_string($conn, trim(htmlentities(htmlspecialchars($_POST['username']))));
+                            $name = mysqli_real_escape_string($conn, trim(htmlentities(htmlspecialchars($_POST['name']))));
+                            $email = mysqli_real_escape_string($conn, trim(htmlentities(htmlspecialchars($_POST['email']))));
+                            $dob = mysqli_real_escape_string($conn, trim(htmlentities(htmlspecialchars($_POST['dob']))));
+                            $password = mysqli_real_escape_string($conn, trim(htmlentities(htmlspecialchars($_POST['password']))));
+                        
+                            // Validate form data (you should add more validation)
+                            if (empty($username) || empty($name) || empty($email) || empty($dob) || empty($password)) {
+                                $error[] = "All fields are required.";
+                            }
+                            
+                            if(empty($username)){array_push($error, "Username is required");}
+                        
+                            // Check if username or email already exists
+                            $stmt = $conn->prepare("SELECT * FROM users WHERE username = ? OR email = ?");
+                            $stmt->bind_param("ss", $username, $email);
+                            $stmt->execute();
+                            $result = $stmt->get_result();
+                            $stmt->close();
+                        
+                            if ($result->num_rows > 0) {
+                                $errors[] = "Username or email already exists.";
+                            }
+                        
+                            // If no errors, insert user data into the database
+                            if (empty($errors)) {
+                                // Hash the password
+                                $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+                        
+                                // Insert user data into users table
+                                $stmt = $conn->prepare("INSERT INTO users (username, `name`, email, dob, `password`) VALUES (?, ?, ?, ?, ?)");
+                                $stmt->bind_param("sssss", $username, $name, $email, $dob, $hashed_password);
+                                $stmt->execute();
+                                $stmt->close();
+                        
+                                // Redirect to login page
+                                header("Location: login.php");
+                                exit();
+                            }
+                            
+                        // Close database connection
+                        $conn->close();
+                        }
+                        include_once "./components/Error.php";
+                    ?>
+                    
                     <form action="" method="post" class="needs-validation" novalidate>
                         <div class="form-group">
                             <label for="username">Username:</label>

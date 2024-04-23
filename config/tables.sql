@@ -12,6 +12,8 @@ CREATE TABLE
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
 
+ALTER TABLE `users` ADD `password` VARCHAR(255) NOT NULL COMMENT 'Hash password' AFTER `dob`;
+
 -- Create event_tb table
 CREATE TABLE
     event_tb (

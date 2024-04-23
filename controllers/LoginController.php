@@ -1,4 +1,6 @@
 <?php
+require_once "./db/connection.php";
+
 session_start();
 
 // Check if the user is already logged in
@@ -12,8 +14,8 @@ $error = array();
 
 if(isset($_POST['login'])){
     
-    $username = mysqli_real_escape_string($con, trim(htmlentities(htmlspecialchars($_POST['username']))));
-    $password = mysqli_real_escape_string($con, trim(htmlentities(htmlspecialchars($_POST['password']))));
+    $username = mysqli_real_escape_string($conn, trim(htmlentities(htmlspecialchars($_POST['username']))));
+    $password = mysqli_real_escape_string($conn, trim(htmlentities(htmlspecialchars($_POST['password']))));
 
     
     if(empty($username)){array_push($error, "Username is required");}
@@ -24,11 +26,11 @@ if(isset($_POST['login'])){
         $password = md5($password);
 
         $query = "SELECT * FROM admin WHERE username = '$username' AND password = '$password'";
-        $result = mysqli_query($con, $query);
+        $result = mysqli_query($conn, $query);
 
         if(mysqli_num_rows($result)){
             // To add if the ser connected into the database as is connected
-            $connected = mysqli_query($con, "UPDATE admin SET `status` = 'Online' WHERE email = ${$email}");
+            $connected = mysqli_query($conn, "UPDATE admin SET `status` = 'Online' WHERE email = ${$email}");
             if($connected) {
                 $_SESSION['user_id'] = $user_id; // Set the user ID or any relevant data
                 header("Location: index.php");
